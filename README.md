@@ -1,33 +1,41 @@
 # pokeapi-vue
+Consumo da pokeApi utilizando Vue.js
 
-This template should help get you started developing with Vue 3 in Vite.
+## Tecnologias utilizadas
+<ul>
+  <li>
+    <a href="https://v2.vuetifyjs.com/en/">Vuetify</a>
+  </li>
+  <li>
+    <a href="https://vuejs.org/guide/introduction.html">VueJs</a>
+  </li>
+  <li>
+    <a href="https://axios-http.com/ptbr/docs/intro">Axios</a>
+  </li>
+</ul>
 
-## Recommended IDE Setup
+## Api
+https://pokeapi.co/docs/v2
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Instalação
 
-## Type Support for `.vue` Imports in TS
+Primeiro certifique-se de ter instalado a [ultima versão do Node.js](https://nodejs.org/en/download).\
+Depois, instale as dependencias rodando o seguinte comando em um terminal dentro da raiz do projeto:
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```
+  npm install
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
+## Desenvolvimento
+#### Iniciar o servidor de desenvolvimento
+Para rodar o projeto, basta rodar o seguinte comando em um terminal dentro da raiz do projeto e abrir o navegador no endereço retornado (padrão localhost:5174)
+```bash
+  npm run serve
 ```
 
-### Type-Check, Compile and Minify for Production
+#### Build de produção | gerar pasta /dist
 
-```sh
-npm run build
+```bash
+  npm run serve
 ```
+
