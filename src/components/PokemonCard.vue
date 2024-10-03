@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, PropType, onMounted  } from 'vue'
+import { ref, computed, PropType, onMounted, inject  } from 'vue'
 
 import { pokemonTypeColors, pokemonTypeWeaknesses } from '../utils/pokemonTypes'
 
@@ -138,6 +138,10 @@ interface pokemonData {
   versions: object;
 }
 
+interface ShowSnackbar {
+  (message: string, color?: string, timeout?: number): void;
+}
+
 export default {
   name: 'PlayingCard',
 
@@ -155,10 +159,12 @@ export default {
   },
 
   setup(props) {
+    const showSnackbar = inject<ShowSnackbar>('showSnackbar')
+
     const cardFront = ref()
 
     const api = CriarApi()
-    const pokemonData = ref<pokemonData>({ types: [] })
+    const pokemonData = ref<pokemonData>()
 
     const loaded = ref<boolean>(false)
     const pokemonType = ref<string>('normal')
@@ -191,7 +197,10 @@ export default {
           getSpriteBGColor()
         }, 200)
       } catch (err) {
-        console.error('Não foi possível carregar os pokemons', err)
+        if (showSnackbar) {
+          showSnackbar('Não foi possível carregar as informações do pokemon', 'red', 2000)
+        }
+        console.error('Não foi possível carregar as informações do pokemon', err)
       }
     }
 
