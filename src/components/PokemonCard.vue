@@ -18,7 +18,7 @@
         class="card-front"
       >
         <div
-          v-if="loaded"
+          v-if="loaded && pokemonData"
           class="d-flex-column card-wrapper"
         >
           <div class="card-top"> 
@@ -53,7 +53,7 @@
             </div>
           </div>
           <div class="card-sprite">
-            <img :src="pokemonData.sprites.front_default">
+            <img :src="pokemonData.sprites.other['official-artwork'].front_default">
           </div>
           <div class="card-ability">
             <div class="ability-label">
@@ -103,39 +103,16 @@
 </template>
 
 <script lang="ts">
-import { ref, computed, PropType, onMounted, inject  } from 'vue'
+import { ref, computed, type PropType, onMounted, inject  } from 'vue'
 
-import { pokemonTypeColors, pokemonTypeWeaknesses } from '../utils/pokemonTypes'
+import { pokemonTypeColors, pokemonTypeWeaknesses } from '@/utils/PokemonTypes'
+import type { PokemonData } from '@/utils/PokemonData'
 
 import CriarApi from '../api/index'
 
 interface pokemonMin {
   name: string;
   url: string;
-}
-
-interface pokemonData {
-  id: number;
-  name: string;
-  base_experience: number;
-  height: number;
-  is_default: boolean;
-  order: number;
-  weight: number;
-  abilities: Array<{
-    is_hidden: boolean;
-    slot: number;
-    ability: object;
-  }>;
-  forms: Array<object>;
-  game_indices: Array<object>;
-  held_items: Array<object>;
-  location_area_encounters: string;
-  moves: Array<object>;
-  types: Array<object>;
-  species: object;
-  sprites: object;
-  versions: object;
 }
 
 interface ShowSnackbar {
@@ -164,7 +141,7 @@ export default {
     const cardFront = ref()
 
     const api = CriarApi()
-    const pokemonData = ref<pokemonData>()
+    const pokemonData = ref<PokemonData>()
 
     const loaded = ref<boolean>(false)
     const pokemonType = ref<string>('normal')
@@ -405,6 +382,7 @@ export default {
       margin-right: 15px
       background: #fefefe
       img
+        width: 110px
         margin-left: auto
         margin-right: auto
 
@@ -431,7 +409,7 @@ export default {
         margin-left: 8px
         margin-bottom: auto
         margin-top: auto
-        font-size: 1.3rem
+        font-size: 1.2rem
 
     &-moves
       display: flex
