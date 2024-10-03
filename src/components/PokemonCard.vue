@@ -6,6 +6,7 @@
   >
     <div
       class="card-inner"
+      :class="{'dark-card' : pokemonType === 'dark'}"
       :style="cardStyle"
     >
       <div
@@ -63,10 +64,37 @@
             </span>
           </div>
           <div class="card-moves">
-            <!-- moves -->
+            <div class="move-icon">
+              <img
+                :src="getTypeIcon(0)"
+                class="secondary"
+              >
+            </div>
+            <span class="move-name">
+              {{ pokemonData.moves[0].move.name }}
+            </span>
+            <span class="move-power">
+              10
+              <!-- Não possui essa informação, portanto deixa deixa o valor fixo :( -->
+            </span>
           </div>
           <div class="card-details">
-          <!-- details -->
+            <div class="details-weakness">
+              <label class="weakness-label">weakness</label>
+              <img
+                v-for="(type, i) in pokemonTypeWeaknesses[pokemonType]"
+                :key="`${pokemonData.name}-weakness-${i}`"
+                :src="getTypeUrl(type)"
+                class="weakness-icon"
+              >
+            </div>
+            <div class="details-retreat">
+              <label class="retreat-label">retreat</label>
+              <img
+                src="@/assets/img/energy.png"
+                class="retreat-icon"
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -77,7 +105,7 @@
 <script lang="ts">
 import { ref, computed, PropType, onMounted  } from 'vue'
 
-import { pokemonTypeColors } from '../utils/pokemonTypes'
+import { pokemonTypeColors, pokemonTypeWeaknesses } from '../utils/pokemonTypes'
 
 import CriarApi from '../api/index'
 
@@ -168,14 +196,18 @@ export default {
     }
 
     const getTypeBackground = () => {
-      const type = pokemonType.value || 'normal'
+      const type = pokemonType.value
       const url = new URL(`../assets/img/${type}.png`, import.meta.url).href
       
       cardFront.value.style['background-image'] = `url(${url})`
     }
 
     const getTypeIcon = (index: number) => {
-      const type = pokemonData.value.types[index]?.type?.name || 'normal'
+      const type = pokemonData.value.types[index]?.type?.name
+      return getTypeUrl(type)
+    }
+
+    const getTypeUrl = (type: string) => {
       const url = new URL(`../assets/img/icon-${type}.png`, import.meta.url).href
       return url
     }
@@ -185,7 +217,7 @@ export default {
     }
 
     const getSpriteBGColor = () => {
-      const colors = pokemonTypeColors[pokemonType.value || 'normal']
+      const colors = pokemonTypeColors[pokemonType.value]
       cardFront.value.children[0].children[1].style['background'] = `radial-gradient(circle, ${colors.accent} 0%, ${colors.primary} 100%)`
     }
 
@@ -228,14 +260,17 @@ export default {
 
     return {
       cardFront,
+      pokemonTypeWeaknesses,
       pokemonData,
       activeIndex,
+      pokemonType,
       loaded,
       handleMouseMove,
       resetTilt,
       cardStyle,
       glareStyle,
       getTypeIcon,
+      getTypeUrl,
       toggleTypes
     }
   },
@@ -301,6 +336,8 @@ export default {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3)
     border-radius: 10px
     overflow: hidden
+    &.dark-card span
+      color: white !important
     
     &:hover 
       box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4)
@@ -367,7 +404,6 @@ export default {
       font-weight: bold
       display: flex
       .ability-label
-        font-weight: bold
         background: linear-gradient(0deg, rgba(156,18,18,1) 0%, rgba(212,58,58,1) 50%, rgba(191,25,25,1) 100%)
         color: white
         font-size: 1rem
@@ -386,4 +422,36 @@ export default {
         margin-left: 8px
         margin-bottom: auto
         margin-top: auto
+        font-size: 1.3rem
+
+    &-moves
+      display: flex
+      justify-content: space-around
+      font-size: 1rem
+      font-weight: bold
+      height: 30%
+      .move-icon img
+        width: 25px
+    &-details
+      background: linear-gradient(0deg, rgba(214,214,214,1) 0%, rgba(255,255,255,1) 50%, rgba(209,209,209,1) 100%)
+      border-top-left-radius: 75px
+      border-bottom-left-radius: 29px
+      padding-left: 7px
+      display: flex
+      justify-content: space-between 
+      .details-weakness
+        display: flex
+      .details-retreat
+        display: flex
+        margin-right: 20px
+      .weakness-label, .retreat-label
+        font-size: 0.8rem
+        font-weight: 510
+        margin-right: 2px
+      .weakness-icon, .retreat-icon
+        width: 15px
+        height: 15px
+        margin-top: auto
+        margin-bottom: auto
+        margin-right: 2px
 </style>

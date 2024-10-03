@@ -65,15 +65,37 @@ export const pokemonTypeColors: Record<string, PokemonTypeColors> = {
     accent: 'rgb(103, 99, 62)',
   },
   dark: {
-    primary: 'rgb(0, 0, 0)',
+    primary: 'rgb(74, 74, 74)',
     accent: 'rgb(49, 49, 49)',
   },
   steel: {
-    primary: '#B7B7CE',
-    accent: '#D3D3D3',
+    primary: 'rgb(94, 94, 74)',
+    accent: 'rgb(244, 243, 239)',
   },
   fairy: {
     primary: 'rgb(248, 177, 251)',
     accent: '#F1A7DF',
   },
+};
+
+// Add a new constant for weaknesses
+export const pokemonTypeWeaknesses: Record<string, string[]> = {
+  normal: ['fighting'],
+  fire: ['water', 'rock', 'ground'],
+  water: ['electric', 'grass'],
+  grass: ['fire', 'ice'],
+  electric: ['ground'],
+  ice: ['fire', 'fighting', 'rock'],
+  fighting: ['flying', 'psychic', 'fairy'],
+  poison: ['ground', 'psychic'],
+  ground: ['water', 'ice', 'grass'],
+  flying: ['electric', 'ice', 'rock'],
+  psychic: ['bug', 'ghost', 'dark'],
+  bug: ['fire', 'flying', 'rock'],
+  rock: ['water', 'grass', 'fighting'],
+  ghost: ['ghost', 'dark'],
+  dragon: ['ice', 'fairy'],
+  dark: ['fighting', 'bug', 'fairy'],
+  steel: ['fire', 'fighting', 'ground'],
+  fairy: ['poison', 'steel']
 };
