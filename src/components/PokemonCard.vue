@@ -3,6 +3,7 @@
     class="poke-card"
     @mousemove="handleMouseMove"
     @mouseleave="resetTilt"
+    @click="$emit('selecionarPokemon', pokemonData)"
   >
     <div
       class="card-inner"
@@ -135,6 +136,7 @@ export default {
     }
   },
 
+  emits: ['selecionarPokemon'],
   setup(props) {
     const showSnackbar = inject<ShowSnackbar>('showSnackbar')
 
@@ -312,6 +314,8 @@ export default {
   width: 250px
   height: 350px
   perspective: 1000px
+  user-select: none
+  cursor: pointer
 
   .card-inner 
     width: 100%

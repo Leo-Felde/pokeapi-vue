@@ -8,6 +8,7 @@
         v-for="pokemon in pokemonsEncontrados"
         :key="`card-${pokemon.name}`"
         :pokemon="pokemon"
+        @selecionar-pokemon="selecionarPokemon"
       />
     </div>
 
@@ -22,6 +23,8 @@
 
 <script lang="ts">
 import { ref, onMounted, onBeforeUnmount, inject } from 'vue'
+import { usePokemonStore } from '@/stores/PokemonStore'
+
 import CriarApi from '@/api/index'
 import PokemonCard from '@/components/PokemonCard.vue'
 
@@ -39,6 +42,8 @@ export default {
   setup() {
     const showSnackbar = inject<ShowSnackbar>('showSnackbar')
     
+    const pokemonStore = usePokemonStore()
+
     const api = CriarApi()
     const pokemonsEncontrados = ref([])
 
@@ -87,6 +92,10 @@ export default {
       }
     }
 
+    const selecionarPokemon = (pokemonData: PokemonData) => {
+      pokemonStore.setSelectedPokemon(pokemonData) // Set the selected Pokemon in the store
+    }
+
     onMounted(() => {
       listarPokemons()
       window.addEventListener('scroll', handleScroll)
@@ -100,6 +109,7 @@ export default {
       pokemonsEncontrados,
       semMaisPokemons,
       isLoading,
+      selecionarPokemon
     }
   }
 }
@@ -119,17 +129,15 @@ export default {
   gap: 20px
   padding: 20px
 
-  @media (max-width: 768px)
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr))
+  @media (max-width: 1200px)
     gap: 15px
-    margin-left: 0px
-    margin-right: 0px
+    margin-left: 50px
+    margin-right: 50px
 
   @media (max-width: 480px)
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr))
     gap: 10px
-    margin-left: 0px
-    margin-right: 0px
+    margin-left: 10px
+    margin-right: 10px
 
 #loading-indicator
   display: flex
