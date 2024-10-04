@@ -3,14 +3,14 @@ import type { PokemonData } from '@/utils/PokemonData'
 
 export const usePokemonStore = defineStore('pokemon', {
   state: () => ({
-    selectedPokemon: null as PokemonData | null,
+    selectedPokemon: {} as PokemonData,
   }),
   actions: {
     setSelectedPokemon(pokemon: PokemonData) {
       this.selectedPokemon = pokemon
     },
     clearSelectedPokemon() {
-      this.selectedPokemon = null
+      this.selectedPokemon = {}
     }
   },
 })

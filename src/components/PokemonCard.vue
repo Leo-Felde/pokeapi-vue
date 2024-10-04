@@ -42,14 +42,14 @@
               <img
                 :src="getTypeIcon(0)"
                 :class="{ 'active': activeIndex === 0 && pokemonData.types.length > 1}"
-                @click="toggleTypes"
+                @click.stop="toggleTypes"
               >
               <img
                 v-if="pokemonData.types.length > 1"
                 :src="getTypeIcon(1)"
                 class="secondary"
                 :class="{ 'active': activeIndex === 1 }"
-                @click="toggleTypes"
+                @click.stop="toggleTypes"
               >
             </div>
           </div>
@@ -316,6 +316,11 @@ export default {
   perspective: 1000px
   user-select: none
   cursor: pointer
+  transition: transform 0.5s ease
+  z-index: 1
+  &.selected
+    position: sticky !important
+    z-index: 3 !important
 
   .card-inner 
     width: 100%
@@ -405,7 +410,7 @@ export default {
         margin-left: 8px
         margin-bottom: auto
         margin-top: auto
-        font-size: 1.2rem
+        font-size: 1rem
 
     &-moves
       display: flex
