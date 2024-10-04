@@ -15,8 +15,8 @@
         :style="glareStyle"
       />
       <div
-        ref="cardFront"
-        class="card-front"
+        ref="cardFace"
+        class="card-face"
       >
         <div
           v-if="loaded && pokemonData"
@@ -140,7 +140,7 @@ export default {
   setup(props) {
     const showSnackbar = inject<ShowSnackbar>('showSnackbar')
 
-    const cardFront = ref()
+    const cardFace = ref()
 
     const api = CriarApi()
     const pokemonData = ref<PokemonData>()
@@ -187,7 +187,7 @@ export default {
       const type = pokemonType.value
       const url = new URL(`../assets/img/${type}.png`, import.meta.url).href
       
-      cardFront.value.style['background-image'] = `url(${url})`
+      cardFace.value.style['background-image'] = `url(${url})`
     }
 
     const getTypeIcon = (index: number) => {
@@ -206,7 +206,7 @@ export default {
 
     const getSpriteBGColor = () => {
       const colors = pokemonTypeColors[pokemonType.value]
-      cardFront.value.children[0].children[1].style['background'] = `radial-gradient(circle, ${colors.accent} 0%, ${colors.primary} 100%)`
+      cardFace.value.children[0].children[1].style['background'] = `radial-gradient(circle, ${colors.accent} 0%, ${colors.primary} 100%)`
     }
 
     const handleMouseMove = (e) => {
@@ -247,7 +247,7 @@ export default {
     }))
 
     return {
-      cardFront,
+      cardFace,
       pokemonTypeWeaknesses,
       pokemonData,
       activeIndex,
@@ -343,8 +343,7 @@ export default {
       transition: opacity 0.3s ease, background 0.1s ease
       opacity: 0
 
-    .card-front,
-    .card-back 
+    .card-face
       width: 100%
       height: 100%
       position: absolute
@@ -354,17 +353,10 @@ export default {
       align-items: center
       font-size: 24px
       border-radius: 10px
-    .card-front
       background-color: rgb(202, 202, 202)
       color: #000
       z-index: 1
       border: #FFE163 6px solid
-
-    .card-back 
-      background-color: #ff4d4d
-      color: #fff
-      transform: rotateY(180deg)
-      z-index: 1
 
   .card
     &-wrapper
