@@ -41,7 +41,8 @@
             <div class="type-icons">
               <img
                 :src="getTypeIcon(0)"
-                :class="{ 'active': activeIndex === 0 && pokemonData.types.length > 1}"
+                :class="{ 'active': activeIndex === 0 && pokemonData.types.length > 1, 'disabled': pokemonData.types.length === 1}"
+                
                 @click.stop="toggleTypes"
               >
               <img
@@ -321,6 +322,9 @@ export default {
   &.selected
     position: sticky !important
     z-index: 3 !important
+  @media (max-width: 655px)
+    margin-left: auto
+    margin-right: auto
 
   .card-inner 
     width: 100%
@@ -442,4 +446,8 @@ export default {
         margin-top: auto
         margin-bottom: auto
         margin-right: 2px
+
+label
+  user-select: none
+  pointer-events: none
 </style>
