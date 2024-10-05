@@ -2,30 +2,30 @@
   <StylizedCard
     id="card-detalhes"
     paper
-    color="yellow"
-    :class="{'hidden' : !pokemon.name}"
+    color="blue"
+    :class="{'hidden' : !stats.length}"
   >
-    <h2 class="text-center">
+    <h2
+      v-if="stats.length"
+      class="text-center"
+    >
       Stats
     </h2>
-    <div
-      v-if="pokemon.stats"
-      class="px-7 pb-2"
-    >
+    <div class="px-7 pb-2">
       <div
-        v-for="(stat) in pokemon.stats"
-        :key="stat.stat.name"
+        v-for="statData in stats"
+        :key="statData.stat.name"
         class="stats-data"
       >
-        <label>{{ formatStatName(stat.stat.name) }}</label>
+        <label>{{ formatStatName(statData.stat.name) }}</label>
         <v-progress-linear
-          :model-value="stat.base_stat"
+          :model-value="statData.base_stat"
           color="blue"
           height="12"
           min="0"
           max="100"
         >
-          <span>{{ stat.base_stat }}</span>
+          <span>{{ statData.base_stat }}</span>
         </v-progress-linear>
       </div>
     </div>
@@ -33,29 +33,34 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, type PropType } from 'vue'
-import type { PokemonData } from '@/utils/PokemonData'
+import { defineComponent } from 'vue'
+
+import type { PokemonStat } from '@/utils/PokemonData'
 import StylizedCard from './StylizedCard.vue'
 
 export default defineComponent({
-  name: 'PokemonDetails',
+  name: 'CardDetalhes',
   
   components: {
     StylizedCard
   },
 
   props: {
-    pokemon: {
-      type: Object as PropType<PokemonData>,
-      default: () => ({}),
+    stats: {
+      type: Array<PokemonStat>,
+      default: () => ([]),
     },
   },
 
-  methods: {
-    formatStatName(statName: string): string {
+  setup () {
+    const formatStatName = (statName: string) => {
       return statName.charAt(0).toUpperCase() + statName.slice(1).replace('-', ' ')
-    },
-  },
+    }
+
+    return {
+      formatStatName
+    }
+  }
 })
 </script>
 
@@ -63,12 +68,12 @@ export default defineComponent({
 #card-detalhes
   position: absolute
   z-index: 2
-  transition: opacity 0.5s ease
   opacity: 100%
   width: 250px
+  transition: opacity 0.5s eat-out
 .hidden
+  transition: opacity 0s ease-in
   opacity: 0% !important
-
 
 .stats-data
   label
