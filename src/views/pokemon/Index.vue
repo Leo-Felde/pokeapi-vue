@@ -44,7 +44,8 @@
         @click="selecionarPokemon(pokemonSelecionado)" 
       />
 
-      <CardDetalhes :pokemon="pokemonSelecionado" />
+      <CardDetalhes :stats="pokemonSelecionado.stats" />
+      <CardEvolucao :species="pokemonSelecionado.species" />
     </div>
   </div>
 </template>
@@ -60,6 +61,7 @@ import type { PokemonData } from '@/utils/PokemonData'
 import SearchInput from '@/components/SearchInput.vue'
 import PokemonCard from '@/components/PokemonCard.vue'
 import CardDetalhes from '@/components/CardDetalhes.vue'
+import CardEvolucao from '@/components/CardEvolucao.vue'
 
 interface ShowSnackbar {
   (message: string, color?: string, timeout?: number): void;
@@ -71,28 +73,27 @@ export default {
   components: {
     SearchInput,
     PokemonCard,
-    CardDetalhes
+    CardDetalhes,
+    CardEvolucao
   },
 
   setup() {
     const showSnackbar = inject<ShowSnackbar>('showSnackbar')
     
     const pokemonStore = usePokemonStore()
-
     const listWrapper = ref()
-
     const api = CriarApi()
     
-    const pokemonsEncontrados = ref([])
-    const pokemonsFiltrados = ref([])
+    const pokemonsEncontrados = ref<PokemonData[]>([])
+    const pokemonsFiltrados = ref<PokemonData[]>([])
 
-    const limit = ref(20)
-    const offset = ref(0)
-    const semMaisPokemons = ref(false)
-    const isLoading = ref(false)
+    const limit = ref<number>(20)
+    const offset = ref<number>(0)
+    const semMaisPokemons = ref<boolean>(false)
+    const isLoading = ref<boolean>(false)
 
-    const searchText = ref('')
-    const searchType = ref(null)
+    const searchText = ref<string | null>('')
+    const searchType = ref<string | null>(null)
 
     const listarPokemons = async () => {
       if (semMaisPokemons.value || isLoading.value) return
@@ -117,9 +118,8 @@ export default {
         filtrarPokemons()
 
       } catch (err) {
-        if (showSnackbar) {
-          showSnackbar('Não foi possível carregar novos pokemons', 'red', 2000)
-        }
+        showSnackbar('Não foi possível carregar os pokemons', 'red', 2000)
+
         console.error('Não foi possível carregar os pokemons', err)
       } finally {
         isLoading.value = false
@@ -167,7 +167,8 @@ export default {
       const windowHeight = window.innerHeight
       const documentHeight = document.documentElement.scrollHeight
 
-      const scrollOffset = 100 // quão longe do bottom fazer o request
+      // quão longe do bottom fazer o request
+      const scrollOffset = 100
       if (scrollTop + windowHeight >= documentHeight - scrollOffset) {
         listarPokemons() 
       }
@@ -201,8 +202,9 @@ export default {
 
       const cardElement = document.getElementById(`card-${pokemonSelecionado.value.name}`)
       const cardDetalhes = document.getElementById('card-detalhes')
+      const cardEvolucao = document.getElementById('card-evolucao')
 
-      if (!cardElement || !cardDetalhes) return
+      if (!cardElement) return
 
       var x       = cardElement.getBoundingClientRect().x
       var y       = cardElement.getBoundingClientRect().y
@@ -215,8 +217,15 @@ export default {
 
       cardElement.style = 'transform: translate('+xVector+'px,'+yVector+'px) scale(1.2);'
       
-      cardDetalhes.style.left = `${cx + cardElement.clientWidth}px`
-      cardDetalhes.style.top = `${cy - cardElement.clientHeight / 2}px`
+      if (cardDetalhes) {
+        cardDetalhes.style.left = `${cx - cardElement.clientWidth * 1.7}px`
+        cardDetalhes.style.top = `${cy - cardElement.clientHeight / 1.7}px`
+      }
+
+      if (cardEvolucao) {
+        cardEvolucao.style.left = `${cx + cardElement.clientWidth / 1.42}px`
+        cardEvolucao.style.top = `${cy - cardElement.clientHeight / 1.7}px`
+      }
     }
 
     watch(() => searchText.value, () => {

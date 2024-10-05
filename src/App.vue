@@ -6,7 +6,7 @@
       <AppBar />
 
       <v-main class="d-flex">
-        <Pokemons />
+        <router-view />
       </v-main>
     </v-layout>
   </v-app>
@@ -14,7 +14,6 @@
 
 <script lang="ts">
 import AppBar from '@/components/AppBar.vue'
-import Pokemons from '@/pages/Pokemons.vue'
 import Snackbar from '@/components/Snackbar.vue'
 
 export default {
@@ -22,7 +21,6 @@ export default {
 
   components: {
     AppBar,
-    Pokemons,
     Snackbar
   }
 }

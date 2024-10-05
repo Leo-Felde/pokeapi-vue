@@ -11,9 +11,11 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
     "axios": "^1.7.7",
     "pinia": "^2.1.7",
-    "vue": "^3.4.29"
+    "vue": "^3.4.29",
+    "vue-router": "^4.4.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",

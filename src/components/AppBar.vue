@@ -6,7 +6,7 @@
   >
     <img
       id="app-icon"
-      src="@/assets/img/tcg-logo.png"
+      src="/icon.png"
     >
     <label id="app-label">Poke<span id="app-label-2">cards</span></label>
     <slot />
