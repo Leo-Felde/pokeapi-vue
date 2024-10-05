@@ -101,3 +101,16 @@ export interface PokemonData {
   types: PokemonType[];
   weight: number;
 }
+
+export interface EvolutionChain {
+  evolution_details: unknown[];
+  evolves_to: Array<object>;
+  is_baby: boolean;
+  species: PokemonSpecies;
+}
+
+export interface PokemonEvolution {
+  baby_trigger_item: unknown;
+  chain: EvolutionChain;
+  id: number;
+}

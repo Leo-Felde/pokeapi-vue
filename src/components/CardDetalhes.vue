@@ -68,12 +68,12 @@ export default defineComponent({
 #card-detalhes
   position: absolute
   z-index: 2
-  opacity: 100%
+  visibility: visible
   width: 250px
-  transition: opacity 0.5s eat-out
+  transition: visibility 0.5s eat-out
 .hidden
-  transition: opacity 0s ease-in
-  opacity: 0% !important
+  transition: visibility 0s ease-in !important
+  visibility: hidden !important
 
 .stats-data
   label

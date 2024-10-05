@@ -3,7 +3,7 @@
     id="card-evolucao"
     paper
     color="red"
-    :class="{'hidden' : !species}"
+    :class="{'hidden' : !species || evolutionChain?.length <= 1}"
   >
     <h2
       v-if="species"
@@ -11,14 +11,29 @@
     >
       Cadeia de Evolução
     </h2>
-    <div class="px-7 pb-2">
+    <div
+      v-if="evolutionChain?.length >= 2"
+      class="px-7 pb-2"
+    >
       <div
-        v-for="(pokemon, index) in evolutionNames"
+        v-for="(evolution, index) in evolutionChain"
         :key="index"
         class="evolution-step"
       >
-        <label>{{ pokemon }}</label>
-        <span v-if="index < evolutionNames.length - 1"> → </span>
+        <v-avatar
+          :image="getSpriteUrl(evolution.url)"
+          class="mx-auto"
+          size="64"
+          color="grey"
+          style="outline: 3px #d2d2d2 solid"
+        />
+        <label class="mx-auto">{{ evolution.name }}</label>
+        <v-icon
+          v-if="index < evolutionChain.length - 1"
+          class="mx-auto"
+        >
+          mdi-chevron-down
+        </v-icon>
       </div>
     </div>
   </StylizedCard>
@@ -27,7 +42,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch, inject, type PropType } from 'vue'
 
-import type { PokemonSpecies } from '@/utils/PokemonData'
+import type { EvolutionChain, PokemonEvolution, PokemonSpecies } from '@/utils/PokemonData'
 
 import StylizedCard from './StylizedCard.vue'
 import CriarApi from '@/api/index'
@@ -55,10 +70,10 @@ export default defineComponent({
     const ShowSnackbar = inject<ShowSnackbar>('showSnackbar')
 
     const api = CriarApi()
-    const evolutionChain = ref<object | null>(null)
-    const evolutionNames = ref<string[]>([])
+    const evolutionRaw = ref<object | null>(null)
+    const evolutionChain = ref<PokemonSpecies[]>([])
 
-    const fetchEvolutionChainUrl = async () => {
+    const carregarEvolucao = async () => {
       // que função feia, meu Deus!
       if (props.species) {
         try {
@@ -66,8 +81,10 @@ export default defineComponent({
           const evolutionChainUrl = speciesResp.data.evolution_chain.url
 
           const evolutionResp = await api.get(evolutionChainUrl)
-          evolutionChain.value = evolutionResp.data
-          formatarNomeEvolucao(evolutionResp.data.chain)
+          evolutionRaw.value = evolutionResp.data
+          if (evolutionRaw.value?.id) {
+            formatarEvolucao()
+          }
         } catch (error) {
           ShowSnackbar('Não foi possível carregar a cadeia de evolução', 'red', 2000)
           console.error('Erro ao buscar a cadeia de evolução:', error)
@@ -75,25 +92,50 @@ export default defineComponent({
       }
     }
 
-    const formatarNomeEvolucao = (chain: any) => {
-      const names = []
-      let currentChain = chain
+    const iterarEvolucao = (chainNode: EvolutionChain): PokemonSpecies[] => {
+      const evolution: PokemonSpecies[] = []
+      
+      let currentChain = chainNode
       while (currentChain) {
-        names.push(currentChain.species.name)
+        evolution.push(currentChain.species)
         currentChain = currentChain.evolves_to[0]
       }
-      evolutionNames.value = names
+
+      return evolution
+    }
+
+    const formatarEvolucao = () => {
+      const evolution = iterarEvolucao(evolutionRaw.value.chain)
+
+      evolutionChain.value = evolution
+    }
+
+    const getSpriteUrl = (url: string) => {
+      if (!url) return null
+
+      const parts = url.split('/').filter(Boolean)
+      const idSpecie = parts[parts.length - 1]
+
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${idSpecie}.png`
     }
 
     onMounted(() => {
-      fetchEvolutionChainUrl()
+      carregarEvolucao()
     })
 
-    watch(() => props.species, fetchEvolutionChainUrl)
+    watch(() => props.species, () => {
+      if (props.species) {
+        carregarEvolucao()
+      } else {
+        evolutionChain.value = []
+      }
+      
+    })
 
     return {
+      evolutionRaw,
       evolutionChain,
-      evolutionNames,
+      getSpriteUrl
     }
   },
 })
@@ -103,15 +145,17 @@ export default defineComponent({
 #card-evolucao
   position: absolute
   z-index: 2
-  opacity: 100%
+  visibility: visible
   width: 250px
-  transition: opacity 0.5s eat-out
+  transition: visibility 0.5s ease-in
 
 .hidden
-  transition: opacity 0s ease-in
-  opacity: 0% !important
+  transition: visibility 0s ease-in !important
+  visibility: hidden !important
 
 .evolution-step
+  display: flex
+  flex-direction: column
   label
     font-weight: bold
     font-size: 0.9rem

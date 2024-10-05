@@ -306,7 +306,7 @@ export default {
 
 .health-points
   position: absolute
-  right: 30px
+  right: 32px
   top: 2px
   .hp-label
     font-size: 0.75rem
@@ -315,6 +315,7 @@ export default {
 
   .hp-value
     font-weight: bold
+    font-size: 1.2rem
     letter-spacing: 0.2px
 
 .poke-card
