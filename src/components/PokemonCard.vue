@@ -57,7 +57,10 @@
           <div class="card-sprite">
             <img :src="pokemonData.sprites.other['official-artwork'].front_default">
           </div>
-          <div class="card-ability">
+          <div
+            v-if="pokemonData.abilities.length"
+            class="card-ability"
+          >
             <div class="ability-label">
               Ability
             </div>
@@ -65,7 +68,10 @@
               {{ pokemonData.abilities[0].ability.name }}
             </span>
           </div>
-          <div class="card-moves">
+          <div
+            v-if="pokemonData.moves.length"
+            class="card-moves"
+          >
             <div class="move-icon">
               <img
                 :src="getTypeIcon(0)"
@@ -98,6 +104,7 @@
               >
             </div>
           </div>
+          <span class="pokemon-id">id.{{ pokemonData.id }}</span>
         </div>
       </div>
     </div>
@@ -109,6 +116,7 @@ import { ref, computed, type PropType, onMounted, inject  } from 'vue'
 
 import { pokemonTypeColors, pokemonTypeWeaknesses } from '@/utils/PokemonTypes'
 import type { PokemonData } from '@/utils/PokemonData'
+import { getTypeUrl } from '@/utils/functions'
 
 import CriarApi from '../api/index'
 
@@ -186,19 +194,15 @@ export default {
 
     const getTypeBackground = () => {
       const type = pokemonType.value
+      if (!cardFace.value) return
+
       const url = new URL(`../assets/img/${type}.png`, import.meta.url).href
-      
       cardFace.value.style['background-image'] = `url(${url})`
     }
 
     const getTypeIcon = (index: number) => {
       const type = pokemonData.value.types[index]?.type?.name
       return getTypeUrl(type)
-    }
-
-    const getTypeUrl = (type: string) => {
-      const url = new URL(`../assets/img/icon-${type}.png`, import.meta.url).href
-      return url
     }
 
     const toggleTypes = () => {
@@ -211,6 +215,8 @@ export default {
     }
 
     const handleMouseMove = (e) => {
+      if (navigator.userAgent.match(/iPhone/i)   || navigator.userAgent.match(/iPad/i)  || navigator.userAgent.match(/Android/i))  return
+      
       const card = e.currentTarget
       const rect = card.getBoundingClientRect()
       const cardCenterX = rect.left + rect.width / 2
@@ -300,12 +306,12 @@ export default {
 
 .health-points
   position: absolute
-  right: 35px
+  right: 30px
   top: 2px
   .hp-label
-    font-size: 0.8rem
+    font-size: 0.75rem
     font-weight: bold
-    letter-spacing: -1px
+    letter-spacing: -1.5px
 
   .hp-value
     font-weight: bold
@@ -374,10 +380,10 @@ export default {
     &-top
       height: 12%
       .pokemon-name
-        font-size: 1.1rem
+        font-size: 1rem
         font-weight: 510
         text-transform: capitalize
-        padding-left: 44px
+        padding-left: 40px
 
     &-sprite
       heigh: 50%
@@ -446,6 +452,12 @@ export default {
         margin-top: auto
         margin-bottom: auto
         margin-right: 2px
+
+.pokemon-id
+  font-size: 0.7rem
+  position: absolute
+  bottom: 0px
+  left: 5px
 
 label
   user-select: none
