@@ -10,7 +10,7 @@
     @update:model-value="updateTextValue"
   >
     <template #prepend-inner>
-      <v-menu :close-on-content-click="false">
+      <v-menu>
         <template #activator="{ props: menu }">
           <v-tooltip location="bottom">
             <template #activator="{ props: tooltip }">
