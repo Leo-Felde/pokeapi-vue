@@ -61,7 +61,7 @@
 
 <script lang="ts">
 import { computed, mergeProps, ref, defineComponent, type PropType } from 'vue'
-import { pokemonTypeColors } from '../utils/PokemonTypes.ts'
+import { pokemonTypeColors } from @/utils/PokemonTypes.ts'
 import { getTypeUrl } from '@/utils/Functions'
 
 export default defineComponent({
