@@ -179,7 +179,7 @@ export default {
       const textFilter = searchText.value.toLowerCase()
 
       pokemonsFiltrados.value = pokemonsEncontrados.value.filter((pokemon) => {
-        return pokemon.name.toLowerCase().includes(textFilter) || pokemon.id?.toString().includes(textFilter)
+        return pokemon.name.toLowerCase().includes(textFilter)
       })
     }
 
@@ -290,7 +290,9 @@ export default {
     })
 
     onMounted(() => {
+      pokemonStore.setSelectedPokemon({})
       listarPokemons()
+      
       useCarouselBreakpoint.value = window.innerWidth < 860
 
       listWrapper.value.addEventListener('scroll', handleScroll)

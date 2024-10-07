@@ -73,6 +73,7 @@ export default defineComponent({
   visibility: visible
   width: 250px
   transition: visibility 0.5s eat-out
+  height: fit-content
 .hidden
   transition: visibility 0s ease-in !important
   visibility: hidden !important

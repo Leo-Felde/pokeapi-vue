@@ -27,7 +27,7 @@
               BASIC
             </div>
             <span class="pokemon-name">
-              {{ pokemonData.name }}
+              {{ pokemonData.name.slice(0, 14) }}
             </span>
             <div class="health-points">
               <span class="hp-label">
@@ -134,14 +134,8 @@ export default {
 
   props: {
     pokemon: {
-      type: Object as PropType<pokemonMin>,
-      required: true,
-      validator(value: pokemonMin) {
-        return (
-          value.name.trim().length > 0 &&
-          value.url.trim().length > 0 
-        )
-      }
+      type: Object as PropType<pokemonMin | PokemonData>,
+      required: true
     }
   },
 
@@ -168,7 +162,13 @@ export default {
     onMounted(() => {
       if (!props.pokemon?.name) return
 
-      getPokemonData()
+      if (props.pokemon.id) {
+        pokemonData.value = {...props.pokemon}
+        getTypeBackground()
+        loaded.value = true
+      } else {
+        getPokemonData()
+      }
     })
 
     const getPokemonData = async () => {

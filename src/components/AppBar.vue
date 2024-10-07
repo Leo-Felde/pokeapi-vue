@@ -4,11 +4,16 @@
     class="py-2 pl-4"
     absolute
   >
-    <img
-      id="app-icon"
-      src="/icon.png"
+    <RouterLink
+      to="/"
+      class="d-flex"
     >
-    <label id="app-label">Poke<span id="app-label-2">cards</span></label>
+      <img
+        id="app-icon"
+        src="/icon.png"
+      >
+      <label id="app-label">Poke<span id="app-label-2">cards</span></label>
+    </RouterLink>
     <slot />
   </v-app-bar>
 </template>
@@ -20,6 +25,9 @@
 #app-label
   color: red
   font-weight: 450
+  margin-top: auto
+  margin-bottom: auto
+  cursor: pointer
   span
     color: white
 </style>
