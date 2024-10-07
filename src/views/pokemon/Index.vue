@@ -75,7 +75,7 @@ import { usePokemonStore } from '@/stores/PokemonStore'
 
 import CriarApi from '@/api/index'
 
-import type { PokemonData } from '@/utils/PokemonData'
+import type { PokemonData } from '../utils/PokemonData'
 
 import SearchInput from '@/components/SearchInput.vue'
 import PokemonCard from '@/components/PokemonCard.vue'

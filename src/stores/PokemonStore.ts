@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { PokemonData } from '@/utils/PokemonData'
+import type { PokemonData } from '../utils/PokemonData'
 
 export const usePokemonStore = defineStore('pokemon', {
   state: () => ({

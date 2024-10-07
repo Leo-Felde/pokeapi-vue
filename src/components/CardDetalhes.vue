@@ -36,7 +36,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 
-import type { PokemonStat } from '@/utils/PokemonData'
+import type { PokemonStat } from '../utils/PokemonData'
 import StylizedCard from './StylizedCard.vue'
 
 export default defineComponent({

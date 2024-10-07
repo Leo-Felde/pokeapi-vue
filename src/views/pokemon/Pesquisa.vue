@@ -35,7 +35,7 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useDisplay } from 'vuetify'
 
-import type { PokemonData } from '@/utils/PokemonData'
+import type { PokemonData } from '../utils/PokemonData'
 import CriarApi from '@/api/index'
 
 import PokemonCard from '../../components/PokemonCard.vue'

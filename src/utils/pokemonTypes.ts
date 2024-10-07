@@ -73,7 +73,7 @@ export const pokemonTypeColors: Record<string, PokemonTypeColors> = {
   ghost: {
     primary: '#735797',
     accent: '#A79BCA',
-    color: 'rgb(60, 73, 147)'
+    list: 'rgb(60, 73, 147)'
   },
   dragon: {
     primary: 'rgb(76, 73, 58)',

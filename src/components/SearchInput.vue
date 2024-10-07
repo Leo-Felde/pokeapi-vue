@@ -40,7 +40,6 @@
             v-for="(type, index) in types"
             :key="index"
             :active="type === typeValue"
-            :color="pokemonTypeColors[type].list"
             @click="selectType(type)"
           >
             <template #prepend>
@@ -60,9 +59,8 @@
 </template>
 
 <script lang="ts">
-import { computed, mergeProps, ref, defineComponent, type PropType } from 'vue'
-import { pokemonTypeColors } from '@/utils/PokemonTypes.ts'
-import { getTypeUrl } from '@/utils/Functions'
+import { mergeProps, ref, defineComponent, type PropType } from 'vue'
+import { getTypeUrl } from '../utils/Functions'
 
 export default defineComponent({
   props: {
@@ -80,9 +78,17 @@ export default defineComponent({
     const typeValue = ref(props.selectedType)
     const textValue = ref(props.modelValue)
 
-    const types = computed(() => {
-      return Object.keys(pokemonTypeColors)
-    })
+    const types = [
+      'normal',   'fire',
+      'water',    'grass',
+      'electric', 'ice',
+      'fighting', 'poison',
+      'ground',   'flying',
+      'psychic',  'bug',
+      'rock',     'ghost',
+      'dragon',   'dark',
+      'steel',    'fairy'
+    ]
     
     const selectType = (type: string) => {
       typeValue.value = type === typeValue.value ? null : type
@@ -99,7 +105,6 @@ export default defineComponent({
     return {
       mergeProps,
       getTypeUrl,
-      pokemonTypeColors,
       typeValue,
       textValue,
       types,

@@ -114,9 +114,9 @@
 <script lang="ts">
 import { ref, computed, type PropType, onMounted, inject  } from 'vue'
 
-import { pokemonTypeColors, pokemonTypeWeaknesses } from '@/utils/PokemonTypes'
-import type { PokemonData } from '@/utils/PokemonData'
-import { getTypeUrl } from '@/utils/functions'
+import { pokemonTypeColors, pokemonTypeWeaknesses } from '../utils/PokemonTypes'
+import type { PokemonData } from '../utils/PokemonData'
+import { getTypeUrl } from '../utils/Functions'
 
 import CriarApi from '../api/index'
 
@@ -387,7 +387,6 @@ export default {
         padding-left: 40px
 
     &-sprite
-      heigh: 50%
       display: flex
       outline: 3px solid white
       margin-left: 15px

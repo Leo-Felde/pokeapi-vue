@@ -43,7 +43,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch, inject, type PropType } from 'vue'
 
-import type { EvolutionChain, PokemonSpecies } from '@/utils/PokemonData'
+import type { EvolutionChain, PokemonSpecies } from '../utils/PokemonData'
 
 import StylizedCard from './StylizedCard.vue'
 import CriarApi from '@/api/index'
