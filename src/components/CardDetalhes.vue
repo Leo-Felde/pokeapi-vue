@@ -4,6 +4,7 @@
     paper
     color="blue"
     :class="{'hidden' : !stats.length}"
+    @click="$emit('click')"
   >
     <h2
       v-if="stats.length"
@@ -52,6 +53,7 @@ export default defineComponent({
     },
   },
 
+  emits: ['click'],
   setup () {
     const formatStatName = (statName: string) => {
       return statName.charAt(0).toUpperCase() + statName.slice(1).replace('-', ' ')

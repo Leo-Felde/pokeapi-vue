@@ -4,6 +4,7 @@
     paper
     color="red"
     :class="{'hidden' : !species || evolutionChain?.length <= 1}"
+    @click="$emit('click')"
   >
     <h2
       v-if="species"
@@ -42,7 +43,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch, inject, type PropType } from 'vue'
 
-import type { EvolutionChain, PokemonEvolution, PokemonSpecies } from '@/utils/PokemonData'
+import type { EvolutionChain, PokemonSpecies } from '@/utils/PokemonData'
 
 import StylizedCard from './StylizedCard.vue'
 import CriarApi from '@/api/index'
@@ -66,6 +67,7 @@ export default defineComponent({
     },
   },
 
+  emits: ['click'],
   setup(props) {
     const ShowSnackbar = inject<ShowSnackbar>('showSnackbar')
 

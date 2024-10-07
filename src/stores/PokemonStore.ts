@@ -5,6 +5,7 @@ export const usePokemonStore = defineStore('pokemon', {
   state: () => ({
     selectedPokemon: {} as PokemonData,
   }),
+  
   actions: {
     setSelectedPokemon(pokemon: PokemonData) {
       this.selectedPokemon = pokemon

@@ -4,6 +4,7 @@
     tile
     :height="height"
     :width="width"
+    :ripple="false"
   >
     <div
       v-for="n in 4"
@@ -353,4 +354,7 @@ export default {
     right: -$position
     -webkit-transform: rotate(180deg)
     transform: rotate(180deg)
+
+.v-card--link
+  cursor: default !important
 </style>

@@ -10,18 +10,25 @@
       id="list-wrapper"
       ref="listWrapper"
     >
+      <Carousel :show="!!pokemonSelecionado.name && useCarouselBreakpoint" />
+
       <div
-        v-if="pokemonsFiltrados.length"
+        v-if="pokemonsFiltrados.length && isMounted"
         id="pokemon-list"
       >
-        <PokemonCard
+        <Teleport
           v-for="pokemon in pokemonsFiltrados"
-          :id="`card-${pokemon.name}`"
           :key="`card-${pokemon.name}`"
-          :class="{'selected' : pokemon.name === pokemonSelecionado.name}"
-          :pokemon="pokemon"
-          @selecionar-pokemon="selecionarPokemon"
-        />
+          to="#slide-center"
+          :disabled="pokemon.name !== pokemonSelecionado.name || !useCarouselBreakpoint"
+        >
+          <PokemonCard
+            :id="`card-${pokemon.name}`"
+            :class="{'selected' : pokemon.name === pokemonSelecionado?.name}"
+            :pokemon="pokemon"
+            @selecionar-pokemon="selecionarPokemon"
+          />
+        </Teleport>
       </div>
 
       <div
@@ -41,17 +48,29 @@
       <div 
         v-if="pokemonSelecionado.name" 
         class="overlay" 
-        @click="selecionarPokemon(pokemonSelecionado)" 
+        @click="selecionarPokemon(null)" 
       />
 
-      <CardDetalhes :stats="pokemonSelecionado.stats" />
-      <CardEvolucao :species="pokemonSelecionado.species" />
+      <Teleport
+        v-if="isMounted"
+        :disabled="!useCarouselBreakpoint"
+        to="#slide-left"
+      >
+        <CardDetalhes :stats="pokemonSelecionado.stats" />
+      </Teleport>
+      <Teleport
+        v-if="isMounted"
+        :disabled="!useCarouselBreakpoint"
+        to="#slide-right"
+      >
+        <CardEvolucao :species="pokemonSelecionado.species" />
+      </Teleport>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { ref, onMounted, onBeforeUnmount, inject, computed, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, inject, computed, watch, Teleport } from 'vue'
 import { usePokemonStore } from '@/stores/PokemonStore'
 
 import CriarApi from '@/api/index'
@@ -62,6 +81,7 @@ import SearchInput from '@/components/SearchInput.vue'
 import PokemonCard from '@/components/PokemonCard.vue'
 import CardDetalhes from '@/components/CardDetalhes.vue'
 import CardEvolucao from '@/components/CardEvolucao.vue'
+import Carousel from '../../components/Carousel.vue'
 
 interface ShowSnackbar {
   (message: string, color?: string, timeout?: number): void;
@@ -74,7 +94,9 @@ export default {
     SearchInput,
     PokemonCard,
     CardDetalhes,
-    CardEvolucao
+    CardEvolucao,
+    Carousel,
+    Teleport
   },
 
   setup() {
@@ -86,7 +108,9 @@ export default {
     
     const pokemonsEncontrados = ref<PokemonData[]>([])
     const pokemonsFiltrados = ref<PokemonData[]>([])
-
+    
+    const isMounted = ref<boolean>(false)
+    const useCarouselBreakpoint = ref<boolean>(false)
     const limit = ref<number>(20)
     const offset = ref<number>(0)
     const semMaisPokemons = ref<boolean>(false)
@@ -175,17 +199,17 @@ export default {
     }
     
     const pokemonSelecionado = computed(() => {
-      return pokemonStore.selectedPokemon
+      return pokemonStore.selectedPokemon || {}
     })
 
-    const selecionarPokemon = (pokemonData: PokemonData) => {      
+    const selecionarPokemon = (pokemonData: PokemonData | null) => {      
       if (pokemonSelecionado.value.name) {
         const selecionadoAnteriormente = document.getElementById(`card-${pokemonSelecionado.value.name}`)
-        if (!selecionadoAnteriormente) return
+        if (selecionadoAnteriormente) {
+          selecionadoAnteriormente.style = 'transform: translate(0); z-index: 2;'
+        }
 
-        selecionadoAnteriormente.style = 'transform: translate(0); z-index: 2;'
-
-        if (pokemonSelecionado.value.name === pokemonData.name) {
+        if (pokemonData === null || (pokemonSelecionado.value.name === pokemonData.name && !useCarouselBreakpoint.value)) {
           listWrapper.value.classList.remove('no-scroll')
           pokemonStore.clearSelectedPokemon()
           return
@@ -197,8 +221,27 @@ export default {
       listWrapper.value.classList.add('no-scroll')
     }
 
-    const calcularPosicaoCentro = ()=>  {
-      if (!pokemonSelecionado.value.name) return
+    const onWindowResize = () => {
+      useCarouselBreakpoint.value = window.innerWidth < 860
+
+      const cardElement = document.getElementById(`card-${pokemonSelecionado.value.name}`)
+      const cardDetalhes = document.getElementById('card-detalhes')
+      const cardEvolucao = document.getElementById('card-evolucao')
+
+      if (cardElement) {
+        cardElement.style = ''
+        selecionarPokemon(null)
+      }
+      if (cardDetalhes) {
+        cardDetalhes.style = ''
+      }
+      if (cardEvolucao) {
+        cardEvolucao.style = ''
+      }
+    }
+
+    const calcularPosicaoCentro = () => {
+      if (!pokemonSelecionado.value?.name || useCarouselBreakpoint.value) return
 
       const cardElement = document.getElementById(`card-${pokemonSelecionado.value.name}`)
       const cardDetalhes = document.getElementById('card-detalhes')
@@ -248,23 +291,28 @@ export default {
 
     onMounted(() => {
       listarPokemons()
+      useCarouselBreakpoint.value = window.innerWidth < 860
 
       listWrapper.value.addEventListener('scroll', handleScroll)
-      window.addEventListener('resize', calcularPosicaoCentro)
+      window.addEventListener('resize', onWindowResize)
+
+      isMounted.value = true
     })
 
     onBeforeUnmount(() => {
       listWrapper.value.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('resize', calcularPosicaoCentro)
+      window.removeEventListener('resize', onWindowResize)
     })
 
     return {
+      isMounted,
       listWrapper,
       pokemonsEncontrados,
       pokemonsFiltrados,
       searchText,
       searchType,
       pokemonSelecionado,
+      useCarouselBreakpoint,
       semMaisPokemons,
       isLoading,
       selecionarPokemon
