@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import HomeView from '@/views/Home.vue';
-import ListaPokemons from '@/views/pokemon/index.vue';
+import ListaPokemons from '@/views/pokemon/Index.vue';
 import PesquisaPokemon from '@/views/pokemon/Pesquisa.vue';
 
 const routes: Array<RouteRecordRaw> = [
