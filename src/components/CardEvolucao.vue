@@ -87,7 +87,7 @@ export default defineComponent({
           if (evolutionRaw.value?.id) {
             formatarEvolucao()
           }
-        } catch (error) {
+        } catch (error: any) {
           ShowSnackbar('Não foi possível carregar a cadeia de evolução', 'red', 2000)
           console.error('Erro ao buscar a cadeia de evolução:', error)
         }

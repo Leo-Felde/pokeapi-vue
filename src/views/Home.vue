@@ -66,12 +66,12 @@ export default {
     const { mdAndUp } = useDisplay()
     const api = CriarApi()
 
-    const searchQuery = ref<string | null>('')
+    const searchQuery = ref<string>('')
     const isFound = ref<boolean | null>(null)
     const loading = ref<boolean>(false)
 
     const onInput = async () => {
-      if (searchQuery.value.length < 1) {
+      if (searchQuery.value && searchQuery.value.length < 1) {
         isFound.value = null
         return
       }
@@ -82,7 +82,7 @@ export default {
       try {
         await api.get(`/pokemon/${searchQuery.value}`)
         isFound.value = true
-      } catch (error) {
+      } catch (error: any) {
         if (error.response && error.response.status === 404) {
           isFound.value = false
         } else {

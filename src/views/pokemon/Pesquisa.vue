@@ -70,7 +70,7 @@ export default {
         const resp = await api.get(`/pokemon/${route.params.query}`)
         console.log(resp)
         pokemonEncontrado.value = resp.data
-      } catch (error) {
+      } catch (error: any) {
         console.error('não foi possível carregar o pokemon', error)
       } finally {
         loading.value = false

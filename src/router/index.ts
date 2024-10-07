@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import HomeView from '@/views/Home.vue';
 import ListaPokemons from '@/views/pokemon/index.vue';
+import PesquisaPokemon from '@/views/pokemon/Pesquisa.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -12,6 +13,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/pokemons',
     name: 'ListaPokemons',
     component: ListaPokemons,
+  },
+  {
+    path: '/pokemons/:query',
+    name: 'PesquisaPokemon',
+    component: PesquisaPokemon,
   }
 ];
 

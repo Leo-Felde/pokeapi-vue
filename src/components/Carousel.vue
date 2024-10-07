@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, PropType, watch } from 'vue'
+import { defineComponent, ref, type PropType, watch } from 'vue'
 
 export default defineComponent({
   name: 'SlideComponent',
