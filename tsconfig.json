@@ -1,6 +1,7 @@
 {
   "files": [],
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "noEmitOnError": false,
     "strictNullChecks": false,
     "noImplicitAny": false,
